@@ -1,0 +1,47 @@
+.empty {
+  height: 160px;
+}
+
+.products{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  justify-self: center;
+  gap: 70px;
+}
+
+.product-item {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(201, 194, 183, 0.123);
+  width: 300px;
+}
+
+.product-item div {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.product-item div p {
+  font-size: 20px;
+  color: rgb(80, 77, 77);
+}
+
+.product-item div button {
+  font-size: 17px;
+  color: white;
+  background-color: rgb(80, 77, 77);
+  border: none;
+  border-radius: 50px;
+  width: 120px;
+  height: 40px;
+  cursor: pointer;
+}
+
+.product-item div button:hover {
+  background-color: rgb(148, 142, 142);
+}

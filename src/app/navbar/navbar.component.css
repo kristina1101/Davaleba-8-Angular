@@ -1,0 +1,46 @@
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  gap: 400px;
+  width: 100%;
+  align-self: center;
+  justify-self: center;
+  align-items: center;
+  background-color: rgba(7, 7, 7, 0.219);
+  position: fixed;
+  height: 130px;
+  font-family: "Dancing Script", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+nav h1 {
+  font-size: 34px;
+}
+
+.navButtons {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+nav button {
+  font-family: "Dancing Script", cursive;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  background-color: transparent;
+  border: none;
+  font-size: 27px;
+  cursor: pointer;
+}
+
+nav button span {
+  font-size: 20px;
+  color: red;
+}
+
+nav button:hover {
+  color: white;
+}
