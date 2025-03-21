@@ -7,16 +7,12 @@ import {
   provideHttpClient,
   withInterceptors,
 } from '@angular/common/http';
-import { InterceptorService } from './interceptor.service';
+import { loaderInterceptor } from './loader.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideHttpClient(), {
-      provide: HTTP_INTERCEPTORS,
-      useClass: InterceptorService,
-      multi: true,
-    },
+    provideHttpClient(withInterceptors([loaderInterceptor])),
   ],
 };

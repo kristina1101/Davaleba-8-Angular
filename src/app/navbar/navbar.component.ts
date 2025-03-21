@@ -1,20 +1,22 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { CartService } from '../cart.service';
+import { ApiService } from '../api.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
 })
 export class NavbarComponent {
   cartCount: number = 0;
-  constructor(public router: Router, public cartService: CartService) {}
+
+  constructor(public router: Router, public apiService: ApiService) {}
 
   ngOnInit() {
-    this.cartService.cartProducts.subscribe((count) => {
-      this.cartCount = count;
+    this.apiService.cartProducts.subscribe((totalQuantity) => {
+      this.cartCount = totalQuantity;
     });
   }
 

@@ -1,46 +1,71 @@
 import { Component } from '@angular/core';
-import { CartService } from '../cart.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { BehaviorSubject } from 'rxjs';
+import { ApiService } from '../api.service';
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-cart',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LoaderComponent],
   templateUrl: './cart.component.html',
   styleUrl: './cart.component.css',
 })
 export class CartComponent {
   cartItems: any[] = [];
-  private cartCount = new BehaviorSubject<number>(0);
-  cartProducts = this.cartCount.asObservable();
+  private cartCount = 0;
+  public isLoading: any;
 
-  constructor(public cartService: CartService) {}
+  constructor(public apiService: ApiService) {}
 
   ngOnInit(): void {
     this.loadCart();
   }
 
   loadCart() {
-    this.cartItems = this.cartService.getCartItems();
+    this.apiService.getCartItems().subscribe((items) => {
+      this.cartItems = items;
+      this.apiService.refreshCartCount();
+    });
   }
 
   updateQuantity(productId: number, change: number) {
-    this.cartService.updateQuantity(productId, change);
-    this.loadCart();
+    const product = this.cartItems.find(item => item.product.id === productId);
+    if (product) {
+      const newQuantity = product.quantity + change;
+      
+      if (newQuantity <= 0) {
+        this.removeFromCart(productId);
+      } else {
+        this.apiService.updateCartItem(productId, newQuantity, product.price).subscribe(() => {
+          this.loadCart();
+        });
+      }
+    }
   }
+  
 
-  removeFromCart(productId: number) {
-    this.cartService.removeFromCart(productId);
-    this.loadCart();
+  removeFromCart(itemId: number) {
+    if (!itemId) {
+      console.error("Invalid item ID:", itemId);
+      return;
+    }
+  
+    this.apiService.removeFromCart(itemId).subscribe({
+      next: () => {
+        this.cartItems = this.cartItems.filter(item => item.product.id !== itemId);
+        this.apiService.refreshCartCount();
+      },
+      error: (err) => console.error("Error removing product:", err)
+    });
   }
 
   getTotalAmount() {
-    return this.cartService.getTotalAmount();
+    return this.apiService.getTotalAmount(this.cartItems);
   }
 
-  clearCart() {
-    this.cartService.clearCart();
-    this.loadCart();
+  ngOnInitt() {
+    this.apiService.loader.subscribe((status) => {
+      this.isLoading = status;
+    });
   }
 }
